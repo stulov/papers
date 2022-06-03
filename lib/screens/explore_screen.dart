@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:papers/components/components.dart';
+import 'package:papers/cubits/wallpapers_state.dart';
+import 'package:papers/di/locator.dart';
+import 'package:papers/models/models.dart';
+
+class ExploreScreen extends StatefulWidget {
+  const ExploreScreen({Key? key}) : super(key: key);
+
+  static Page page() {
+    return MaterialPage(
+        name: PapersPages.explore,
+        key: ValueKey(PapersPages.explore),
+        child: const ExploreScreen());
+  }
+
+  @override
+  State<ExploreScreen> createState() => _ExploreScreenState();
+}
+
+class _ExploreScreenState extends State<ExploreScreen> {
+  final _pagingController = PagingController<int, Wallpaper>(firstPageKey: 1);
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pagingController.addPageRequestListener(
+      (pageKey) => locator.wallpaperCubit.getWallpapers(pageKey),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: CustomScrollView(
+        slivers: [
+          const SliverToBoxAdapter(
+            child: PapersHeader(),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            sliver: BlocListener(
+              bloc: locator.wallpaperCubit,
+              listener: (context, state) {
+                if (state is WallpapersSuccessState) {
+                  _pagingController.appendPage(
+                      state.wallpapers, state.page + 1);
+                  // TODO: handle adding the very last page
+                }
+                if (state is WallpapersErrorState) {
+                  _pagingController.error = 'Failed to fetch wallpapers';
+                }
+              },
+              child: PagedSliverGrid(
+                  pagingController: _pagingController,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 7.0,
+                    mainAxisSpacing: 7.0,
+                    childAspectRatio: 160 / 203,
+                  ),
+                  builderDelegate: PagedChildBuilderDelegate<Wallpaper>(
+                      itemBuilder: (context, item, index) {
+                    return WallpaperGridItem(wallpaper: item);
+                  })),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

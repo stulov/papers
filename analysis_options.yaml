@@ -1,0 +1,15 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    - always_use_package_imports
+    - sort_pub_dependencies
+    - directives_ordering
+    - eol_at_end_of_file
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "lib/di/injection.config.dart"
+  errors:
+    invalid_annotation_target: ignore
