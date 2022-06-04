@@ -11,9 +11,11 @@ class WallpapersCubit extends Cubit<WallpapersState> {
     emit(const WallpapersState.loading());
 
     try {
+      final res = await locator.wallpaperRepository.getWallpapers(page);
       emit(WallpapersState.success(
-        wallpapers: await locator.wallpaperRepository.getWallpapers(page),
+        wallpapers: res.wallpapers,
         page: page,
+        isLastPage: res.isLast,
       ));
     } catch (_) {
       emit(const WallpapersState.error());

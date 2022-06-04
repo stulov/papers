@@ -4,4 +4,5 @@ class Palette {
   Palette._();
   static const darkGrey = Color(0xFF252B5C);
   static const softGrey = Color(0xFFF5F4F8);
+  static const fadedViolet = Color(0xFF53587A);
 }

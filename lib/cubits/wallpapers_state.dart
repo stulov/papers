@@ -8,6 +8,7 @@ class WallpapersState with _$WallpapersState {
   const factory WallpapersState.success({
     required List<Wallpaper> wallpapers,
     required int page,
+    required bool isLastPage,
   }) = WallpapersSuccessState;
 
   const factory WallpapersState.loading() = WallpapersLoadingState;

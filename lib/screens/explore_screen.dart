@@ -52,9 +52,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
               bloc: locator.wallpaperCubit,
               listener: (context, state) {
                 if (state is WallpapersSuccessState) {
-                  _pagingController.appendPage(
-                      state.wallpapers, state.page + 1);
-                  // TODO: handle adding the very last page
+                  if (!state.isLastPage) {
+                    _pagingController.appendPage(
+                        state.wallpapers, state.page + 1);
+                  } else {
+                    _pagingController.appendLastPage(state.wallpapers);
+                  }
                 }
                 if (state is WallpapersErrorState) {
                   _pagingController.error = 'Failed to fetch wallpapers';
@@ -70,7 +73,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ),
                   builderDelegate: PagedChildBuilderDelegate<Wallpaper>(
                       itemBuilder: (context, item, index) {
-                    return WallpaperGridItem(wallpaper: item);
+                    return WallpaperGridItem(
+                      wallpaper: item,
+                      onTap: () => locator.appRouterCubit.viewWallpaper(item),
+                    );
                   })),
             ),
           )

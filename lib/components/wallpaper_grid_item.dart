@@ -1,22 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:papers/components/item_tag.dart';
+import 'package:papers/components/components.dart';
 import 'package:papers/models/models.dart';
-import 'package:papers/utils/icons.dart';
 import 'package:papers/utils/palette.dart';
 
 class WallpaperGridItem extends StatelessWidget {
   final Wallpaper wallpaper;
+  final VoidCallback? onTap;
 
   const WallpaperGridItem({
     super.key,
     required this.wallpaper,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final gridItem = Container(
       decoration: BoxDecoration(
         color: Palette.softGrey,
         borderRadius: BorderRadius.circular(25.0),
@@ -63,47 +63,16 @@ class WallpaperGridItem extends StatelessWidget {
             padding: const EdgeInsets.only(top: 8.0, bottom: 6.0),
             child: Row(
               children: [
-                const Icon(
-                  PapersIcons.resolution,
-                  size: 9.0,
-                  color: Color(0xFF53587A),
-                ),
-                const SizedBox(width: 2.0),
-                RichText(
-                  text: TextSpan(
-                    text: wallpaper.dimensionX.toString(),
-                    style: GoogleFonts.montserrat(
-                      color: const Color(0xFF53587A),
-                      fontSize: 11.0,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'x',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      TextSpan(
-                        text: wallpaper.dimensionY.toString(),
-                      ),
-                    ],
-                  ),
+                ResolutionLabel(
+                  dimensionX: wallpaper.dimensionX,
+                  dimensionY: wallpaper.dimensionY,
+                  color: Palette.fadedViolet,
                 ),
                 const SizedBox(width: 18.0),
-                const Icon(
-                  PapersIcons.download,
-                  size: 9.0,
-                  color: Color(0xFF53587A),
-                ),
-                const SizedBox(width: 3.0),
-                Text(
-                  '${(wallpaper.fileSize / 1024 / 1024).toStringAsFixed(1)} MB',
-                  style: GoogleFonts.montserrat(
-                    color: const Color(0xFF53587A),
-                    fontSize: 10.0,
-                    fontWeight: FontWeight.w700,
-                  ),
+                DownloadSizeLabel(
+                  downloadSizeInBytes: wallpaper.fileSize,
+                  color: Palette.fadedViolet,
+                  fontSize: 10.0,
                 ),
               ],
             ),
@@ -111,5 +80,12 @@ class WallpaperGridItem extends StatelessWidget {
         ],
       ),
     );
+
+    return onTap == null
+        ? gridItem
+        : GestureDetector(
+            onTap: onTap,
+            child: gridItem,
+          );
   }
 }
