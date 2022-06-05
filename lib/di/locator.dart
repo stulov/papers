@@ -7,7 +7,9 @@ class _Locator {
 
   late final wallpaperRepository = getIt<WallpaperRepository>();
 
-  late final wallpaperCubit = getIt<WallpapersCubit>();
+  late final wallpapersCubit = getIt<WallpapersCubit>();
+
+  late final wallpaperManagerCubit = getIt<WallpaperManagerCubit>();
 }
 
 final locator = _Locator();
