@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
 import 'package:papers/components/components.dart';
 import 'package:papers/models/models.dart';
@@ -17,9 +18,14 @@ class WallpaperGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gridItem = Container(
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: Palette.softGrey,
-        borderRadius: BorderRadius.circular(25.0),
+        shape: SmoothRectangleBorder(
+          borderRadius: SmoothBorderRadius(
+            cornerRadius: 25.0,
+            cornerSmoothing: 1.0,
+          ),
+        ),
       ),
       padding: const EdgeInsets.all(9.0),
       child: Column(
@@ -29,8 +35,11 @@ class WallpaperGridItem extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
+                  child: ClipSmoothRect(
+                    radius: SmoothBorderRadius(
+                      cornerRadius: 15.0,
+                      cornerSmoothing: 1.0,
+                    ),
                     child: Container(
                       color: const Color(0xFFD9D9D9),
                       child: CachedNetworkImage(

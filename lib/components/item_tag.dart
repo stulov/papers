@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,8 +16,11 @@ class ItemTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
+    return ClipSmoothRect(
+      radius: SmoothBorderRadius(
+        cornerRadius: 8.0,
+        cornerSmoothing: 1.0,
+      ),
       child: BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: 8.0,
